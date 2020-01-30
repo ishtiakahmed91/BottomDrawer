@@ -7,6 +7,8 @@
 
 import UIKit
 
+typealias DrawerItemSelectedCallBack = (String) -> Void
+
 protocol BottomDrawerDisplayLogic: class {
     func displayItems(viewModel: BottomDrawer.LoadItems.ViewModel)
 }
@@ -19,6 +21,8 @@ class BottomDrawerViewController: UIViewController {
     @IBOutlet weak var drawerTableView: UITableView!
     @IBOutlet weak var drawerVisualEffectView: UIVisualEffectView!
     @IBOutlet weak var topLayoutConstraint: NSLayoutConstraint!
+    
+    var drawerItemSelectedCallBack: DrawerItemSelectedCallBack?
     
     var cellType: BottomDrawerCellType = .title
     var selectedRow: Int?
@@ -47,10 +51,6 @@ class BottomDrawerViewController: UIViewController {
         drawerPositionMiddle = view.frame.height/2
         topLayoutConstraint.constant = drawerPositionMiddle
         loadItems()
-        
-        drawerTableView.setEditing(true, animated: false)
-        drawerTableView.allowsMultipleSelectionDuringEditing = true
-
     }
     
     override func viewDidLayoutSubviews() {
@@ -115,6 +115,10 @@ private extension BottomDrawerViewController {
 // MARK: - UITableViewDelegate Logic
 extension BottomDrawerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if !items.isEmpty, let id = items[indexPath.row].id {
+            drawerItemSelectedCallBack?("\(id)")
+        }
+        
         DispatchQueue.main.async {
             self.dismissBottomDrawer()
         }
@@ -170,9 +174,9 @@ extension BottomDrawerViewController: BottomDrawerDisplayLogic {
         cellType = viewModel.cellType
         selectedRow = viewModel.selectedRow
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
-            let indexPath = IndexPath(row: 13, section: 0)
-            self.drawerTableView.scrollToRow(at: indexPath, at: .middle, animated: false)
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) { [weak self] in
+            let indexPath = IndexPath(row: self?.selectedRow ?? 0, section: 0)
+            self?.drawerTableView.scrollToRow(at: indexPath, at: .middle, animated: false)
         }
     }
 }
