@@ -23,7 +23,6 @@ class BottomDrawerViewController: UIViewController {
     @IBOutlet weak var topLayoutConstraint: NSLayoutConstraint!
     
     var drawerItemSelectedCallBack: DrawerItemSelectedCallBack?
-    
     var cellType: BottomDrawerCellType = .title
     var selectedRow: Int?
     var drawerPositionMiddle: CGFloat = 0.0
@@ -58,10 +57,7 @@ class BottomDrawerViewController: UIViewController {
         drawerTableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: drawerPositionMiddle, right: 0)
     }
     
-    @IBAction func backgroundViewPressed(_ sender: UITapGestureRecognizer) {
-        dismissBottomDrawer()
-    }
-    
+    // MARK: User events
     @IBAction func drawerScrolledToBottom(_ gestureRecognizer: UIPanGestureRecognizer) {
         if let gestureRecognizerView = gestureRecognizer.view {
             let translation = gestureRecognizer.translation(in: self.view)            
@@ -88,15 +84,7 @@ class BottomDrawerViewController: UIViewController {
             }
         }
     }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let scene = segue.identifier {
-            let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
-            if let router = router, router.responds(to: selector) {
-                router.perform(selector, with: segue)
-            }
-        }
-    }
+
 }
 
 // MARK: - Private Functions
@@ -107,7 +95,9 @@ private extension BottomDrawerViewController {
     }
     
     func dismissBottomDrawer() {
-        dismiss(animated: false, completion: nil)
+        DispatchQueue.main.async {
+            self.dismiss(animated: false, completion: nil)
+        }
     }
     
 }
@@ -119,9 +109,7 @@ extension BottomDrawerViewController: UITableViewDelegate {
             drawerItemSelectedCallBack?("\(id)")
         }
         
-        DispatchQueue.main.async {
-            self.dismissBottomDrawer()
-        }
+        dismissBottomDrawer()
     }
 }
 
