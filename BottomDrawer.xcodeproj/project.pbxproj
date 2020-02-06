@@ -19,9 +19,8 @@
 		DD8B70F62359DB9700955318 /* BottomDrawer+SceneSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8B70F02359DB9700955318 /* BottomDrawer+SceneSetup.swift */; };
 		DD8B70F72359DB9700955318 /* BottomDrawerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8B70F12359DB9700955318 /* BottomDrawerPresenter.swift */; };
 		DD8B70F82359DB9700955318 /* BottomDrawerRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8B70F22359DB9700955318 /* BottomDrawerRouter.swift */; };
-		DD8B70FA235D9DC400955318 /* TitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8B70F9235D9DC400955318 /* TitleTableViewCell.swift */; };
-		DD8B70FC235D9E0500955318 /* HorizontalSubtitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8B70FB235D9E0500955318 /* HorizontalSubtitleTableViewCell.swift */; };
-		DD8B70FE235D9E1700955318 /* VerticalSubtitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8B70FD235D9E1700955318 /* VerticalSubtitleTableViewCell.swift */; };
+		DD8B70FC235D9E0500955318 /* PrimaryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8B70FB235D9E0500955318 /* PrimaryTableViewCell.swift */; };
+		DDA234CC23EC3F4C00347BE9 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA234CB23EC3F4C00347BE9 /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,9 +38,8 @@
 		DD8B70F02359DB9700955318 /* BottomDrawer+SceneSetup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BottomDrawer+SceneSetup.swift"; sourceTree = "<group>"; };
 		DD8B70F12359DB9700955318 /* BottomDrawerPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomDrawerPresenter.swift; sourceTree = "<group>"; };
 		DD8B70F22359DB9700955318 /* BottomDrawerRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomDrawerRouter.swift; sourceTree = "<group>"; };
-		DD8B70F9235D9DC400955318 /* TitleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleTableViewCell.swift; sourceTree = "<group>"; };
-		DD8B70FB235D9E0500955318 /* HorizontalSubtitleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalSubtitleTableViewCell.swift; sourceTree = "<group>"; };
-		DD8B70FD235D9E1700955318 /* VerticalSubtitleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalSubtitleTableViewCell.swift; sourceTree = "<group>"; };
+		DD8B70FB235D9E0500955318 /* PrimaryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryTableViewCell.swift; sourceTree = "<group>"; };
+		DDA234CB23EC3F4C00347BE9 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +74,7 @@
 			children = (
 				DDD20F2B236600EC009EF9D1 /* Scenes */,
 				DD8B70D52359D6CB00955318 /* AppDelegate.swift */,
+				DDA234CB23EC3F4C00347BE9 /* Constants.swift */,
 				DD8B70D72359D6CB00955318 /* ViewController.swift */,
 				DD8B70D92359D6CB00955318 /* Main.storyboard */,
 				DD8B70DC2359D6CC00955318 /* Assets.xcassets */,
@@ -88,9 +87,7 @@
 		DDD20F2A23660099009EF9D1 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				DD8B70F9235D9DC400955318 /* TitleTableViewCell.swift */,
-				DD8B70FB235D9E0500955318 /* HorizontalSubtitleTableViewCell.swift */,
-				DD8B70FD235D9E1700955318 /* VerticalSubtitleTableViewCell.swift */,
+				DD8B70FB235D9E0500955318 /* PrimaryTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -195,12 +192,11 @@
 				DD8B70D62359D6CB00955318 /* AppDelegate.swift in Sources */,
 				DD8B70F52359DB9700955318 /* BottomDrawerModels.swift in Sources */,
 				DD8B70F62359DB9700955318 /* BottomDrawer+SceneSetup.swift in Sources */,
-				DD8B70FC235D9E0500955318 /* HorizontalSubtitleTableViewCell.swift in Sources */,
+				DDA234CC23EC3F4C00347BE9 /* Constants.swift in Sources */,
+				DD8B70FC235D9E0500955318 /* PrimaryTableViewCell.swift in Sources */,
 				DD8B70F32359DB9700955318 /* BottomDrawerViewController.swift in Sources */,
 				DD8B70F82359DB9700955318 /* BottomDrawerRouter.swift in Sources */,
-				DD8B70FA235D9DC400955318 /* TitleTableViewCell.swift in Sources */,
 				DD8B70F72359DB9700955318 /* BottomDrawerPresenter.swift in Sources */,
-				DD8B70FE235D9E1700955318 /* VerticalSubtitleTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -23,13 +23,34 @@ class BottomDrawerViewController: UIViewController {
     @IBOutlet weak var topLayoutConstraint: NSLayoutConstraint!
     
     var drawerItemSelectedCallBack: DrawerItemSelectedCallBack?
-    var cellType: BottomDrawerCellType = .title
     var selectedRow: Int?
-    var drawerPositionMiddle: CGFloat = 0.0
+    var drawerYPosition: CGFloat = 0.0
+    var viewHight: CGFloat = 0.0
+    var gestureFactor: CGFloat = 0.0
+    var isSubtitleAvaiable: Bool?
+    var axis: NSLayoutConstraint.Axis?
+    var drawerPosition: BottomDrawerPosition?
     
     var items: [BottomDrawer.Item] = [] {
         didSet {
             drawerTableView.reloadData()
+            calculateDrawerYPosition()
+        }
+    }
+    
+    var cellType: BottomDrawerCellType? {
+        didSet {
+            switch cellType {
+            case .title, .none:
+                isSubtitleAvaiable = false
+                axis = .horizontal
+            case .verticalSubtitle:
+                isSubtitleAvaiable = true
+                axis = .vertical
+            case .horizontalSubtitle:
+                isSubtitleAvaiable = true
+                axis = .horizontal
+            }
         }
     }
     
@@ -47,26 +68,27 @@ class BottomDrawerViewController: UIViewController {
     // MARK: View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        drawerPositionMiddle = view.frame.height/2
-        topLayoutConstraint.constant = drawerPositionMiddle
         loadItems()
+        viewHight = view.frame.height
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        drawerTableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: drawerPositionMiddle, right: 0)
+        drawerTableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: drawerYPosition, right: 0)
     }
     
     // MARK: User events
     @IBAction func drawerScrolledToBottom(_ gestureRecognizer: UIPanGestureRecognizer) {
         if let gestureRecognizerView = gestureRecognizer.view {
-            let translation = gestureRecognizer.translation(in: self.view)            
+            let translation = gestureRecognizer.translation(in: view)
             gestureRecognizerView.frame.origin.y +=  translation.y
-            gestureRecognizer.setTranslation(CGPoint.zero, in: self.view)
+            gestureRecognizer.setTranslation(.zero, in: view)
             
             if gestureRecognizer.state == .ended {
-                let isBounchBackToIntialDrawerYPosition =  gestureRecognizerView.frame.origin.y < drawerPositionMiddle * 1.5
-                let yPosition = isBounchBackToIntialDrawerYPosition ? drawerPositionMiddle : view.frame.height
+                let gestureLength = gestureRecognizerView.frame.origin.y - drawerYPosition
+                let oneThirdOfDrawerLength = abs(viewHight - drawerYPosition)/3
+                let isBounchBackToIntialDrawerYPosition = oneThirdOfDrawerLength > gestureLength
+                let yPosition = isBounchBackToIntialDrawerYPosition ? drawerYPosition : viewHight
                 
                 UIView.animate(withDuration: 0.4,
                                delay: 0.0,
@@ -75,7 +97,7 @@ class BottomDrawerViewController: UIViewController {
                                options: .curveEaseInOut,
                                animations: ({
                                 gestureRecognizerView.frame.origin.y =  yPosition
-                                gestureRecognizer.setTranslation(CGPoint.zero, in: self.view)
+                                gestureRecognizer.setTranslation(.zero, in: self.view)
                                }), completion: {_ in
                                 if !isBounchBackToIntialDrawerYPosition {
                                     self.dismissBottomDrawer()
@@ -84,7 +106,7 @@ class BottomDrawerViewController: UIViewController {
             }
         }
     }
-
+    
 }
 
 // MARK: - Private Functions
@@ -98,6 +120,29 @@ private extension BottomDrawerViewController {
         DispatchQueue.main.async {
             self.dismiss(animated: false, completion: nil)
         }
+    }
+    
+    func calculateDrawerYPosition(){
+        switch drawerPosition {
+        case .center:
+            drawerYPosition = viewHight/2
+            gestureFactor = 1.2
+        case .top:
+            drawerYPosition = Constants.minimumSpaceBetweenDrawerTopAndViewTop
+            gestureFactor = 1.5
+        case .dynamic, .none:
+            let cellHeight = cellType == .verticalSubtitle ? Constants.verticalCellHeight : Constants.horizontalCellHeight
+            let drawerHeight = cellHeight * CGFloat(items.count) + Constants.additionalAreaOfDrawer
+            
+            if drawerHeight + Constants.minimumSpaceBetweenDrawerTopAndViewTop > viewHight {
+                drawerYPosition = Constants.minimumSpaceBetweenDrawerTopAndViewTop
+                gestureFactor = 1.3
+            } else {
+                drawerYPosition = viewHight - drawerHeight
+                gestureFactor = 1.1
+            }
+        }
+        topLayoutConstraint.constant = drawerYPosition
     }
     
 }
@@ -125,31 +170,25 @@ extension BottomDrawerViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let textColor: UIColor = row == selectedRow ? .red : .black
-        
-        switch cellType {
-        case .title:
-            if let cell = tableView.dequeueReusableCell(withIdentifier: TitleTableViewCell.identifier, for: indexPath) as? TitleTableViewCell {
-                cell.titleLabel.text = items[row].title
-                cell.titleLabel.textColor = textColor
-                return cell
+        if let cell = tableView.dequeueReusableCell(withIdentifier: PrimaryTableViewCell.identifier, for: indexPath) as? PrimaryTableViewCell {
+            if let axis = axis {
+                cell.cellStackView.axis = axis
             }
-        case .verticalSubtitle:
-            if let cell = tableView.dequeueReusableCell(withIdentifier: VerticalSubtitleTableViewCell.identifier, for: indexPath) as? VerticalSubtitleTableViewCell {
-                cell.titleLabel.text = items[row].title
+            
+            cell.titleLabel.text = items[row].title
+            
+            let textColor: UIColor = row == selectedRow ? .orange : .black
+            cell.titleLabel.textColor = textColor
+            
+            if isSubtitleAvaiable == true {
+                cell.subtitleLabel.textAlignment = axis == .horizontal ? .right : .left
                 cell.subtitleLabel.text = items[row].subtitle
-                cell.titleLabel.textColor = textColor
                 cell.subtitleLabel.textColor = textColor
-                return cell
+            } else {
+                cell.subtitleLabel.isHidden = true
             }
-        case .horizontalSubtitle:
-            if let cell = tableView.dequeueReusableCell(withIdentifier: HorizontalSubtitleTableViewCell.identifier, for: indexPath) as? HorizontalSubtitleTableViewCell {
-                cell.titleLabel.text = items[row].title
-                cell.subtitleLabel.text = items[row].subtitle
-                cell.titleLabel.textColor = textColor
-                cell.subtitleLabel.textColor = textColor
-                return cell
-            }
+            
+            return cell
         }
         return UITableViewCell()
     }
@@ -158,27 +197,14 @@ extension BottomDrawerViewController: UITableViewDataSource {
 // MARK: - Display Logic
 extension BottomDrawerViewController: BottomDrawerDisplayLogic {
     func displayItems(viewModel: BottomDrawer.LoadItems.ViewModel) {
-        items = viewModel.items
+        drawerPosition = viewModel.drawerPosition
         cellType = viewModel.cellType
+        items = viewModel.items
         selectedRow = viewModel.selectedRow
         
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) { [weak self] in
             let indexPath = IndexPath(row: self?.selectedRow ?? 0, section: 0)
             self?.drawerTableView.scrollToRow(at: indexPath, at: .middle, animated: false)
         }
-    }
-}
-
-extension UIView {
-    /// Returns with a default string. Replacing NSStringFromClass method
-    static var identifier: String {
-        return String(describing: self)
-    }
-}
-
-extension UIViewController {
-    /// Returns with a default string. Replacing NSStringFromClass method
-    static var identifier: String {
-        return String(describing: self)
     }
 }

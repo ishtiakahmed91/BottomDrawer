@@ -1,5 +1,5 @@
 //
-//  TitleTableViewCell.swift
+//  PrimaryTableViewCell.swift
 //  C24Credit
 //
 //  (c) 2019 CHECK24 Vergleichsportal GmbH
@@ -10,8 +10,11 @@
 //  (paragraph 69a UrhG). All rights are reserved.
 //
 
+
 import UIKit
 
-class TitleTableViewCell: UITableViewCell {
+class PrimaryTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var subtitleLabel: UILabel!
+    @IBOutlet weak var cellStackView: UIStackView!
 }

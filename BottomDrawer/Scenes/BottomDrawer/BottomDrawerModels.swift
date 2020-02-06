@@ -8,17 +8,18 @@
 enum BottomDrawer {
     
     enum LoadItems {
-        
         struct Request { }
         
         struct Response {
             let items: [BottomDrawer.Item]
+            let drawerPosition: BottomDrawerPosition
             let cellType: BottomDrawerCellType
             let selectedItemId: String
         }
         
         struct ViewModel {
             let items: [BottomDrawer.Item]
+            let drawerPosition: BottomDrawerPosition
             let cellType: BottomDrawerCellType
             let selectedRow: Int
         }
@@ -35,4 +36,10 @@ enum BottomDrawerCellType {
     case title
     case horizontalSubtitle
     case verticalSubtitle
+}
+
+enum BottomDrawerPosition {
+    case dynamic
+    case center
+    case top
 }
