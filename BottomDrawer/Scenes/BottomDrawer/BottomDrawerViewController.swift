@@ -26,7 +26,6 @@ class BottomDrawerViewController: UIViewController {
     var selectedRow: Int?
     var drawerYPosition: CGFloat = 0.0
     var viewHight: CGFloat = 0.0
-    var gestureFactor: CGFloat = 0.0
     var isSubtitleAvaiable: Bool?
     var axis: NSLayoutConstraint.Axis?
     var drawerPosition: BottomDrawerPosition?
@@ -126,20 +125,16 @@ private extension BottomDrawerViewController {
         switch drawerPosition {
         case .center:
             drawerYPosition = viewHight/2
-            gestureFactor = 1.2
         case .top:
             drawerYPosition = Constants.minimumSpaceBetweenDrawerTopAndViewTop
-            gestureFactor = 1.5
         case .dynamic, .none:
             let cellHeight = cellType == .verticalSubtitle ? Constants.verticalCellHeight : Constants.horizontalCellHeight
             let drawerHeight = cellHeight * CGFloat(items.count) + Constants.additionalAreaOfDrawer
             
             if drawerHeight + Constants.minimumSpaceBetweenDrawerTopAndViewTop > viewHight {
                 drawerYPosition = Constants.minimumSpaceBetweenDrawerTopAndViewTop
-                gestureFactor = 1.3
             } else {
                 drawerYPosition = viewHight - drawerHeight
-                gestureFactor = 1.1
             }
         }
         topLayoutConstraint.constant = drawerYPosition
