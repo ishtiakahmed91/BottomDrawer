@@ -25,3 +25,5 @@ enum BottomDrawerPosition {
     case top
 }
 ~~~ 
+
+![](demo.gif)
