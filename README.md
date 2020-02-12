@@ -12,6 +12,7 @@ drawerPosition, cellType, selectedItemId should be added in destinationVC.router
 
 
 Available cell type and drawer position: 
+~~~ 
 enum BottomDrawerCellType {
     case title
     case horizontalSubtitle
@@ -23,3 +24,4 @@ enum BottomDrawerPosition {
     case center
     case top
 }
+~~~ 
