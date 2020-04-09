@@ -1,4 +1,4 @@
-# BottomDrawerExample
+# BottomDrawer
 
 This is an example application using clean swift to replicate the bottom drawer behaviour in iOS. 
 
